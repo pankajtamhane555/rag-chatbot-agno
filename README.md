@@ -66,7 +66,7 @@ All dependencies are listed in `requirements.txt`.
 1. **Clone and navigate**:
    ```bash
    git clone <repository-url>
-   cd DemoRagSystem
+   cd rag-chatbot-agno
    ```
 
 2. **Create `.env` file with your OpenAI API key**:
@@ -346,7 +346,7 @@ docker stats --no-stream
 1. **Clone and navigate**:
    ```bash
    git clone <repository-url>
-   cd DemoRagSystem
+   cd rag-chatbot-agno
    ```
 
 2. **Create virtual environment**:
@@ -686,11 +686,11 @@ Cursor automatically indexes:
 ### Current Limitations
 
 **Document Types**: 
-- Only PDF files are supported (as per assignment requirements)
+- Only PDF files are supported
 - Single document type simplifies validation and parsing logic
 
 **LLM Provider**:
-- Uses OpenAI (as specified in assignment)
+- Uses OpenAI for LLM and embeddings
 - Requires OpenAI API key and internet connection
 - API costs apply based on usage
 
@@ -717,15 +717,15 @@ Cursor automatically indexes:
 
 ### Trade-offs Made
 
-**OpenAI (Required by Assignment)**:
-- **Chosen**: OpenAI (as per assignment requirements)
+**OpenAI**:
+- **Chosen**: OpenAI for LLM and embeddings
 - **Trade-off**: API costs, requires internet connection
-- **Rationale**: Meets assignment requirements, high-quality responses, reliable service
+- **Rationale**: High-quality responses, reliable service, widely supported
 
-**PDF Only (Required by Assignment)**:
-- **Chosen**: PDF only (as per assignment requirements)
+**PDF Only**:
+- **Chosen**: PDF only file support
 - **Trade-off**: Limited to single file type
-- **Rationale**: Meets assignment requirements, simpler implementation, focused scope
+- **Rationale**: Simpler implementation, focused scope, PDF is the most common document format
 
 **PostgreSQL vs Dedicated Vector DB**:
 - **Chosen**: PostgreSQL with pgvector (simpler setup, ACID guarantees)
