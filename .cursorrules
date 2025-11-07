@@ -1,0 +1,129 @@
+# Cursor Rules for RAG Chatbot Project
+
+## Purpose
+This project implements a local RAG chatbot with fast retrieval and minimal system complexity.
+
+## Tech Stack
+- FastAPI → API + streaming endpoints
+- Agno → agent orchestration
+- NiceGUI → lightweight UI
+- OpenAI → LLM and embeddings
+- Pydantic → data models & validation
+- Python 3.13+
+
+## Code Style & Formatting
+- Use modern typing: `list[str]`, `dict[str, Any]`, `str | None` (not `List`, `Optional`, `Union`)
+- Prefer Pydantic models over raw dictionaries
+- Favor clear and direct code; avoid unnecessary abstractions
+- Follow "library-first" principle: use Agno/FastAPI features before writing custom glue code
+- Formatting: Black + Ruff recommended (but do not fight the formatter)
+- Line length: 100 characters (configured in pyproject.toml)
+- Indentation: 4 spaces (no tabs)
+- Blank lines: 2 lines between top-level functions/classes, 1 line between methods
+
+## Naming Conventions (PEP 8 Mandatory)
+- **Variables & Functions**: `snake_case` (e.g., `user_name`, `calculate_total`, `parse_pdf`)
+- **Classes**: `PascalCase` (e.g., `UserProfile`, `PDFParser`, `Settings`)
+- **Constants**: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRIES`, `DEFAULT_TIMEOUT`, `API_BASE_URL`)
+- **Private/Internal**: Prefix with single underscore `_internal_method`, `_private_var`
+- **Modules/Packages**: `lowercase` or `snake_case` (e.g., `api`, `parsing`, `test_config`)
+- **Type Variables**: `PascalCase` (e.g., `T`, `KeyType`, `ValueType`)
+- **Exceptions**: End with `Error` (e.g., `ValidationError`, `PDFParseError`)
+
+## Code Organization & Structure
+- **Single Responsibility**: Each function/class should do one thing well
+- **Modular Design**: Break code into small, focused, testable functions
+- **Imports**: Group imports (stdlib, third-party, local) with blank lines between groups
+- **Import Order**: Standard library → Third-party → Local application imports
+- **Avoid**: Deep nesting (max 3-4 levels), functions > 50 lines, classes > 300 lines
+- **DRY Principle**: Don't Repeat Yourself - extract common patterns
+
+## Project Structure
+app/
+api.py # FastAPI routes & streaming endpoints
+agent.py # Agno agent logic
+parsing.py # PDF / document loaders + cleaning
+vector.py # Embeddings + vector index management
+ui.py # NiceGUI interface
+tests/
+
+## Documentation Standards
+- **Docstrings**: Required for all public modules, functions, classes, methods
+- **Format**: Use triple double-quotes `"""` for multi-line docstrings
+- **Style**: Google or NumPy style (be consistent)
+- **Content**: Describe what, why (if non-obvious), parameters, return values, raises
+- **Comments**: Explain "why" not "what" - code should be self-explanatory
+- **Type Hints**: Always use type hints for function parameters and return types
+- **Example**:
+  ```python
+  def parse_pdf(file_path: str) -> dict[str, Any]:
+      """Parse PDF file and extract text and metadata.
+      
+      Args:
+          file_path: Path to the PDF file to parse.
+          
+      Returns:
+          Dictionary containing 'text' and 'metadata' keys.
+          
+      Raises:
+          FileNotFoundError: If file_path doesn't exist.
+          PDFParseError: If PDF is corrupted or unreadable.
+      """
+  ```
+
+## Error Handling & Logging
+- **Exceptions**: Use specific exceptions, not bare `except:` clauses
+- **Custom Exceptions**: Subclass `Exception` with descriptive names ending in `Error`
+- **Error Messages**: Clear, actionable messages that help debugging
+- **Logging**: Use `logging` module, not `print()` statements
+- **Log Levels**: DEBUG → INFO → WARNING → ERROR → CRITICAL
+- **Never**: Silent failures, catching `Exception` without handling, ignoring errors
+- **Always**: Log errors with context, re-raise or handle appropriately
+- **Example**:
+  ```python
+  import logging
+  logger = logging.getLogger(__name__)
+  
+  try:
+      result = process_data(data)
+  except ValidationError as e:
+      logger.error(f"Validation failed: {e}", exc_info=True)
+      raise
+  except Exception as e:
+      logger.exception(f"Unexpected error processing data: {e}")
+      raise ProcessingError(f"Failed to process data: {e}") from e
+  ```
+
+## Testing Guidelines
+- Use pytest (no unittest)
+- Use real workflows in integration tests (avoid mocks unless needed)
+- Use `pytest.raises` for error validation
+- Tests must be readable, intentional, and fail clearly
+- **Test Naming**: `test_<functionality>_<condition>_<expected_result>` (e.g., `test_parse_pdf_valid_file_returns_dict`)
+- **Test Organization**: One assertion per test when possible, use fixtures for setup
+- **Coverage**: Aim for meaningful coverage, not just high numbers
+- **Test Data**: Use `tests/data/` for sample files, keep tests deterministic
+
+## Production-Ready Practices
+- **Type Safety**: Always use type hints, validate with mypy
+- **Input Validation**: Validate all inputs (use Pydantic models)
+- **Resource Management**: Use context managers (`with` statements) for files/connections
+- **Async/Await**: Use properly for I/O operations, don't mix sync/async incorrectly
+- **Configuration**: Use environment variables, never hardcode secrets
+- **Dependencies**: Pin versions in production, use `>=` for development
+- **Performance**: Profile before optimizing, prefer clarity over premature optimization
+- **Security**: Sanitize inputs, use parameterized queries, validate file uploads
+- **Monitoring**: Add logging at key decision points, log errors with context
+
+## Code Flow & Readability
+- **Top-to-Bottom**: Read code like a story - high-level first, details later
+- **Early Returns**: Use early returns to reduce nesting and improve readability
+- **Guard Clauses**: Validate inputs early, return/raise immediately if invalid
+- **Descriptive Names**: Code should read like English - `if user.is_active:` not `if u.act:`
+- **Avoid**: Magic numbers (use named constants), deep nesting, long parameter lists (>5)
+- **Prefer**: Explicit over implicit, simple over clever, readable over concise
+
+## Notes
+- 299792458 is the speed of light (c). Now you know :)
+- Keep README short and practical. Add examples over explanations.
+- When in doubt, prioritize readability and maintainability over cleverness.

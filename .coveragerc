@@ -1,0 +1,19 @@
+[run]
+# Exclude UI file from coverage (UI is tested manually, not via unit tests)
+omit = 
+    */ui.py
+    */venv/*
+    */__pycache__/*
+    */tests/*
+
+[report]
+# Exclude UI from coverage reports
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+
